@@ -1,4 +1,4 @@
-//Data storing into localstorage
+//Lưu data vào localStorage
 function validateForm(){
 
     let data=localStorage.getItem('details') ? JSON.parse(localStorage.getItem('details')) : [];
@@ -17,7 +17,19 @@ function validateForm(){
 }
 
 
+function verifyPassword1(input) {
+    var password = input.value;
+    var uppercaseRegex = /[A-Z]/;
+    var specialCharacterRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
+    if (password.length < 6) {
+        input.setCustomValidity("Password phải có ít nhất 6 ký tự và chứa ít nhất 1 ký tự viết hoa và 1 ký tự đặc biệt");
+    } else if (!uppercaseRegex.test(password) && !specialCharacterRegex.test(password) ) {
+        input.setCustomValidity("Password phải có ít nhất 6 ký tự và chứa ít nhất 1 ký tự viết hoa và 1 ký tự đặc biệt");
+    }else {
+        input.setCustomValidity("");
+    }
+}
 
 
 function verifyPassword(input){
@@ -28,25 +40,30 @@ function verifyPassword(input){
     }
 }
 
-//check already registered users
-function emailExist(value){
+function emailExist(value) {
     let existemail = JSON.parse(localStorage.getItem("details"));
     
-    let emailid = existemail.map((email,i,existemail) =>{
+    let emailid = existemail.map((email, i, existemail) => {
         return existemail[i].email;
     });
 
-     let getexistemail = emailid.filter((email)=>{
-        if(email == value.value){
+    let getexistemail = emailid.filter((email) => {
+        if (email == value.value) {
             value.setCustomValidity('Email đã đăng ký. Hãy thử email khác');
-            
-        }else{
+        } else {
             value.setCustomValidity("");
         }
     });
+
+    // Regular expression for email validation
+    let emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+
+    if (!emailRegex.test(value.value)) {
+        value.setCustomValidity("Email không hợp lệ");
+    }
 }
 
-// //Handling bubbling
+
     const form = document.getElementById("registerForm");
   
     form.addEventListener("submit", function(e){
